@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: multiagent-backend
+  labels:
+    app: multiagent-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: multiagent-backend
+  template:
+    metadata:
+      labels:
+        app: multiagent-backend
+    spec:
+      containers:
+      - name: multiagent-backend
+        image: your-registry/multiagent-backend:latest
+        ports:
+        - containerPort: 8000
+        envFrom:
+        - secretRef:
+            name: agent-secrets
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+          limits:
+            cpu: "1000m"
+            memory: "2Gi"
+        volumeMounts:
+        - name: faiss-storage
+          mountPath: /app/data
+      volumes:
+      - name: faiss-storage
+        persistentVolumeClaim:
+          claimName: faiss-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: multiagent-backend-svc
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 8000
+  selector:
+    app: multiagent-backend
