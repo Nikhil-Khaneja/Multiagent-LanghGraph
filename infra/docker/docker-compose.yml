@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  agent-backend:
+    build: 
+      context: ../../
+      dockerfile: infra/docker/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - GROQ_API_KEY=${GROQ_API_KEY}
+    volumes:
+      - ../../data:/app/data  # Persist FAISS index
+    restart: unless-stopped

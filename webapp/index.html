@@ -3,118 +3,51 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>📚 Book Management System - Artist Liberty</title>
+  <title>Multi-Agent LLM Backend Dashboard</title>
   <link rel="stylesheet" href="/web/assets/styles.css" />
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>📚 Book Management - Artist Liberty</h1>
+  <div class="app-container">
+    <header class="header">
+      <h1>🤖 Multi-Agent System Dashboard</h1>
+      <div class="metrics-bar" id="metricsBar">
+        <span class="badge" id="latencyBadge">Avg Latency: -- ms</span>
+        <span class="badge" id="ingestBadge">Ingested: 0</span>
+      </div>
     </header>
 
-    <div class="content">
-      <div class="nav-buttons">
-        <button class="nav-btn active" data-section="home">📖 Home</button>
-        <button class="nav-btn" data-section="add">➕ Add Book</button>
-        <button class="nav-btn" data-section="update">✏️ Update</button>
-        <button class="nav-btn" data-section="delete">🗑️ Delete</button>
-        <button class="nav-btn" data-section="search">🔍 Search</button>
-      </div>
-
-      <div id="successMessage" class="success-message"></div>
-
-      <div id="home" class="section active">
-        <h2>📖 All Books</h2>
-        <p class="section-help">View all books in your collection</p>
-        <div id="booksList" class="books-list"></div>
-      </div>
-
-      <div id="add" class="section">
-        <h2>➕ Add a New Book</h2>
-        <p class="section-help">Fill in the details and click "Add Book"</p>
-        <div class="form-wrapper">
-          <form id="addBookForm">
-            <div class="form-group">
-              <label for="addTitle">📚 Book Title *</label>
-              <input type="text" id="addTitle" required />
-            </div>
-            <div class="form-group">
-              <label for="addAuthor">✍️ Author Name *</label>
-              <input type="text" id="addAuthor" required />
-            </div>
-            <button type="submit" class="btn-submit">✅ Add Book</button>
-          </form>
-        </div>
-      </div>
-
-      <div id="update" class="section">
-        <h2>✏️ Update a Book</h2>
-        <p class="section-help">Select a book and modify its details</p>
-        <div class="form-wrapper">
-          <form id="updateBookForm">
-            <div class="form-group">
-              <label for="updateId">📍 Select Book *</label>
-              <select id="updateId" required>
-                <option value="">-- Select a book --</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="updateTitle">📚 New Book Title</label>
-              <input type="text" id="updateTitle" required />
-            </div>
-
-            <div class="form-group">
-              <label for="updateAuthor">✍️ New Author Name</label>
-              <input type="text" id="updateAuthor" required />
-            </div>
-
-            <button type="submit" class="btn-submit">💾 Update Book</button>
-          </form>
-
-          <!-- HW required action (NOT copycat naming) -->
-          <button type="button" class="btn-submit" id="presetUpdateBtn">
-            🪄 Set Book #1 = Harry Potter
-          </button>
-        </div>
-      </div>
-
-      <div id="delete" class="section">
-        <h2>🗑️ Delete a Book</h2>
-        <p class="section-help">Remove a book from your collection</p>
-        <div class="form-wrapper">
-          <form id="deleteBookForm">
-            <div class="form-group">
-              <label for="deleteId">📍 Select Book to Delete *</label>
-              <select id="deleteId" required>
-                <option value="">-- Select a book --</option>
-              </select>
-            </div>
-            <p class="warning-text">⚠️ Warning: This action cannot be undone!</p>
-            <button type="submit" class="btn-submit btn-danger">🗑️ Delete Book</button>
-          </form>
-
-          <!-- HW required action -->
-          <button type="button" class="btn-submit btn-danger" id="deleteMaxBtn">
-            🔥 Delete Highest ID Book
-          </button>
-        </div>
-      </div>
-
-      <div id="search" class="section">
-        <h2>🔍 Search Books</h2>
-        <p class="section-help">Search updates in real-time</p>
-        <div class="search-wrapper">
-          <div class="form-group">
-            <label for="searchInput">🔎 Search by Title</label>
-            <input type="text" id="searchInput" placeholder="e.g., Harry..." />
+    <main class="main-content">
+      <section class="panel agent-panel">
+        <h2>Ask the Agent</h2>
+        <div class="input-group">
+          <textarea id="queryInput" placeholder="Enter your research query here..."></textarea>
+          <div class="controls">
+            <label><input type="checkbox" id="streamToggle" checked> Stream Response</label>
+            <button id="sendBtn" class="btn primary">Execute</button>
           </div>
         </div>
-        <div id="searchResults" class="books-list"></div>
-      </div>
-    </div>
-  </div>
+        
+        <div class="trace-container" id="traceContainer">
+          <!-- Traces will be appended here -->
+        </div>
+        
+        <div class="response-container">
+          <h3>Final Response</h3>
+          <div id="finalResponse" class="response-box">Awaiting query...</div>
+        </div>
+      </section>
 
-  <script src="/web/assets/script.js"></script>
+      <section class="panel ingestion-panel">
+        <h2>RAG Ingestion</h2>
+        <div class="input-group">
+          <input type="text" id="sourceId" placeholder="Source ID (e.g., doc-1)" />
+          <textarea id="docContent" placeholder="Paste context or document content here to ingest..."></textarea>
+          <button id="ingestBtn" class="btn secondary">Ingest to Kafka</button>
+        </div>
+        <div id="ingestStatus" class="status-msg"></div>
+      </section>
+    </main>
+  </div>
+  <script src="/web/assets/app.js"></script>
 </body>
 </html>
